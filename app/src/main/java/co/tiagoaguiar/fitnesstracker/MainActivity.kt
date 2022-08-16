@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
             //navegar para proxima tela
             val i = Intent(this, ImcActivity::class.java)
             startActivity(i)
-
         }
+
     }
 }

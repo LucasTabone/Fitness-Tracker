@@ -7,4 +7,5 @@
         do indivíduo em relação à sua altura e assim indicar se está dentro do peso ideal,
         acima ou abaixo do peso desejado.\n\nPreencha os campos de peso e altura para descobrir o seu IMC</string>
     <string name="calc">Calcular</string>
+    <string name="fields_messages">Todos os campos devem ser maiores que ZERO</string>
 </resources>
