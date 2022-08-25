@@ -1,10 +1,16 @@
 package co.tiagoaguiar.fitnesstracker
 
+import android.content.Context
+import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
 
 class ImcActivity : AppCompatActivity() {
 
@@ -25,7 +31,47 @@ class ImcActivity : AppCompatActivity() {
                 Toast.makeText(this, R.string.fields_messages, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+
+            val weight = editWeight.text.toString().toInt()
+            val height = editHeight.text.toString().toInt()
+
+            val result = calculateImc(weight, height)
+            Log.d("teste", "resultado: $result")
+
+            val imcResponseId = imcResponse(result)
+
+           AlertDialog.Builder(this)
+
+                .setTitle(getString(R.string.imc_response, result))
+                .setMessage(imcResponseId)
+                .setPositiveButton(android.R.string.ok) { dialog, which -> }
+
+                .create()
+                .show()
+
+            val service = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            service.hideSoftInputFromWindow(currentFocus?.windowToken,0)
+
         }
+    }
+
+    @StringRes
+    private fun imcResponse(imc: Double): Int {
+        return when {
+            imc < 15.0 -> R.string.imc_severely_low_weight
+            imc < 15.0 -> R.string.imc_very_low_weight
+            imc < 16.0 -> R.string.imc_low_weight
+            imc < 18.5 -> R.string.normal
+            imc < 25.0 -> R.string.imc_high_weight
+            imc < 35.0 -> R.string.imc_so_high_weight
+            imc < 35.0 -> R.string.imc_severely_high_weight
+            else -> R.string.imc_extreme_weight
+        }
+    }
+
+    private fun calculateImc(weight: Int, height: Int): Double {
+        // peso / (altura * altura)
+        return weight / ((height / 100.0) * (height / 100.0))
     }
 
     private fun validate(): Boolean {
@@ -33,9 +79,9 @@ class ImcActivity : AppCompatActivity() {
         // não pode começar com 0
         // quando já é boleana nao precisa de IF/ELSE ele ja returna TRUE OR FALSE
         return (editWeight.text.toString().isNotEmpty()
-            && editHeight.text.toString().isNotEmpty()
-            && !editWeight.text.toString().startsWith("0")
-            && !editHeight.text.toString().startsWith("0"))
+                && editHeight.text.toString().isNotEmpty()
+                && !editWeight.text.toString().startsWith("0")
+                && !editHeight.text.toString().startsWith("0"))
     }
 
 }
