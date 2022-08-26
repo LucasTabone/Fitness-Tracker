@@ -1,36 +1,52 @@
 package co.tiagoaguiar.fitnesstracker
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
 
-  //  private lateinit var btnImc: LinearLayout
-      private lateinit var rvMain: RecyclerView
+    private lateinit var rvMain: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val mainItems = mutableListOf<MainItem>()
+        mainItems.add(
+            MainItem(
+                id = 1,
+                drawableId = R.drawable.ic_baseline_mood_24,
+                textStringId = R.string.label_imc,
+                color = Color.YELLOW
+            )
+        )
+        mainItems.add(
+            MainItem(
+                id = 2,
+                drawableId = R.drawable.ic_baseline_flare_24,
+                textStringId = R.string.label_tmb,
+                color = Color.GREEN
+            )
+        )
+
+        val adapter = MainAdapter(mainItems)
         rvMain = findViewById(R.id.rv_main)
-        val adapter = MainAdapter()
         rvMain.adapter = adapter
         rvMain.layoutManager = LinearLayoutManager(this)
 
-//        btnImc = findViewById(R.id.btn_imc)
-//
-//        btnImc.setOnClickListener() {
-//            //navegar para proxima tela
-//            val i = Intent(this, ImcActivity::class.java)
-//            startActivity(i)
-//        }
     }
 
-    private inner class MainAdapter : RecyclerView.Adapter<MainViewHolder>() {
+    private inner class MainAdapter(private val mainItems: List<MainItem>) :
+        RecyclerView.Adapter<MainViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
             val view = layoutInflater.inflate(R.layout.main_item, parent, false)
@@ -38,18 +54,27 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
-
+            val itemCurrent = mainItems[position]
+            holder.bind(itemCurrent)
         }
 
         override fun getItemCount(): Int {
-        return 15
+            return mainItems.size
         }
 
     }
 
-     // classe que vai buscar as referençias
+    // classe que vai buscar as referençias
     private class MainViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        fun bind(item: MainItem) {
+            val img: ImageView = itemView.findViewById(R.id.item_img_icon)
+            val name: TextView = itemView.findViewById(R.id.item_txt_name)
+            val container: LinearLayout = itemView as LinearLayout
 
+            img.setImageResource(item.drawableId)
+            name.setText(item.textStringId)
+            container.setBackgroundColor(item.color)
+        }
     }
 
 }
