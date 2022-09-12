@@ -48,7 +48,8 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
                 2 -> {
-                    // abrir uma outra activity por EX:
+                    val intent = Intent(this@MainActivity, TmbActivity::class.java)
+                    startActivity(intent)
                 }
             }
             Log.i("teste", "Clicou $id !!")
